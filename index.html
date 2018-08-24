@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <meta name="Generator" content="Sublime Text3">
+    <meta name="Author" content="深山一枯柴">
+    <meta name="website" content="http://www.lihui-v.top">
+    <meta name="Description" content="马不停蹄的🐌!">
+<style type="text/css">
+    #control {
+    	width: 450px;
+    	height: 60px;
+    	border: 1px solid black;
+    	margin: 0 auto;
+    	line-height: 60px;
+    }
+    #cancel {
+    	width: 80px;
+    	height: 40px;
+    	float: right;
+    	background-color: red;
+    	outline: none;
+    	margin: 10px 10px 0 0;
+    }
+    input {
+    	width: 40px;
+    	height: 40px;
+    	vertical-align: middle;
+    }
+	#box div{
+		height: 50px;
+		width: 450px;
+		margin: 0 auto;
+		border: 1px solid black;
+		background: red;
+		margin: 0 auto;
+	}
+	#box div button {
+		float: right;
+		margin: 13px 20px 0 0;
+	}
+</style>
+</head>
+<body>
+<div id="control">
+	<input type="checkbox" name="select">全选
+	<input type="checkbox" name="select">取消
+    <input type="checkbox" name="select">反选
+    <input type="button" value="删除" id="cancel">
+</div>
+
+<div id="box">
+	<div>
+		<input type="checkbox">
+		<span>第1个单元格</span>
+		<button>删除</button>
+	</div>
+	<div>
+		<input type="checkbox">
+		<span>第2个单元格</span>
+		<button>删除</button>
+	</div>
+	<div>
+		<input type="checkbox">
+		<span>第3个单元格</span>
+		<button>删除</button>
+	</div>
+	<div>
+		<input type="checkbox">
+		<span>第4个单元格</span>
+		<button>删除</button>
+	</div>
+	<div>
+		<input type="checkbox">
+		<span>第5个单元格</span>
+		<button>删除</button>
+	</div>
+	<div>
+		<input type="checkbox">
+		<span>第6个单元格</span>
+		<button>删除</button>
+	</div>
+	<div>
+		<input type="checkbox">
+		<span>第7个单元格</span>
+		<button>删除</button>
+	</div>
+	<div>
+		<input type="checkbox">
+		<span>第8个单元格</span>
+		<button>删除</button>
+	</div>
+	<div>
+		<input type="checkbox">
+		<span>第9个单元格</span>
+		<button>删除</button>
+	</div>
+	<div>
+		<input type="checkbox">
+		<span>第10个单元格</span>
+		<button>删除</button>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+    // 封装的获取元素函数
+	function $(id){
+		return document.getElementById(id);
+	}
+	// 得到四个控制按钮
+    var controls = $("control").getElementsByTagName('input');
+     // 获取所有子input。
+	var subs = $("box").getElementsByTagName('input');
+	// 获取所有子div。控制它显示隐藏
+    var divs = $("box").getElementsByTagName('div');
+    // 声明一个空数组，用于存储选中的div
+	var allSelectdivs = new Array();
+ 
+    // 单选逻辑.
+    var selectArry = [];
+      for (var i = 0; i < subs.length; i++) {
+      	subs[i].index = i;
+      	subs[i].onclick = function(){
+      		
+      		selectArry.push(this);
+      		allSelectdivs = selectArry;
+      	}
+      }
+   // 批量删除逻辑
+   	controls[3].onclick = function(){
+   		// allSelectdivs 所有选中的inpiut
+   		  if (allSelectdivs.length==0) {
+   		  	return false;
+   		  }
+   		  			// 循环的是所有的div
+   		  for (var i = 0; i < divs.length; i++) {
+   		  			// 被选中的input
+   		  	 for (var j = 0; j < allSelectdivs.length; j++) {
+   		  	   if (allSelectdivs[j].index==i) {
+   		  	   	divs[i].style.display = "none"
+   		  	   }
+   		  	 }
+   		  } 
+   		  selectArry = [];
+   	}
+    
+   	// 单独删除
+   var btns =$("box").getElementsByTagName('button');
+   	for (var i = 0; i <btns.length; i++) {
+   		btns[i].index = i;
+   		 btns[i].onclick = function(){
+   		 	divs[this.index].style.display = "none"
+   		 }
+   	}
+   	// 全选
+   	controls[0].onclick = function(){
+   		changeSelect(this)
+   		for (var i = 0; i < subs.length; i++) {
+   			subs[i].checked = true;
+   		}
+   				// 把选中的添加的大盒子里 在进行删除
+   			allSelectdivs = subs;
+   	}
+
+   	// 取消
+   	controls[1].onclick = function(){
+   			changeSelect(this)
+   		 for (var i = 0; i < subs.length; i++) {
+   		 	subs[i].checked = false;
+   		 }
+   		 allSelectdivs =[];
+   	}
+   	  // 反选
+   	  controls[2].onclick = function(){
+   	  	 changeSelect(this);
+   	  	  allSelectdivs =[];
+   	  	   for (var i = 0; i < subs.length; i++) {
+   	  	   	if (subs[i].checked) {
+   	  	   		subs[i].checked = false;
+   	  	   	}else{
+   	  	   		subs[i].checked = true;
+   	  	   		 allSelectdivs.push(subs[i])
+   	  	   	}
+   	  	   }
+
+   	  }
+   	// 封装一个函数  实现让控制按钮单选的逻辑   关联选中
+   	  function changeSelect(ele){
+   	  	for (var i = 0; i < controls.length; i++) {
+   			controls[i].checked = false;
+   		}
+   		ele.checked = true;
+   	  }
+</script>
+</body>
+</html>
